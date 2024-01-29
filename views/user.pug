@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#{target.userID}</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+  <link rel="stylesheet" href="./static/PostCard1.css">
+  <link rel="stylesheet" href="./static/profile.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/profileMobile.css">
+  <style>
+  </style>   
+</head>
+
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+  <div id="midSection">
+    <main class="profile-container">
+      <h1 class="name">#{target.name}</h1>
+      <div class="profile-details">
+        <img src='./static/profilephoto/#{target.userID}.jpeg' onerror="this.src='./static/profilephoto/defaultprofile.png'" class="dp" alt="">
+        <ul class="inlist">
+          <li class="numWithLabel">
+            <span class="count">#{target.postCount}</span> 
+            <form action="/archive" method="post">
+              <input type="hidden" name="query" value="Posts">
+              <input type="hidden" name="targetID" value="#{target.userID}">
+              <button type="submit" class="invButton">posts</button>
+            </form>
+          </li>
+          <li class="numWithLabel"><span class="count">#{target.followingCount}</span> 
+            <form action="/connectivity" method="post">
+              <input type="hidden" name="query" value="Following">
+              <input type="hidden" name="targetID" value="#{target.userID}">
+              <button type="submit" class="invButton" >following</button>
+            </form>
+          </li>
+          <li class="numWithLabel"><span class="count" id='followersCountOfUser'>#{target.followersCount}</span>
+            <form action="/connectivity" method="post">
+              <input type="hidden" name="query" value="Followers">
+              <input type="hidden" name="targetID" value="#{target.userID}">
+              <button type="submit" class="invButton">followers</button>
+            </form>
+          </li>
+          <div class="btnC" >
+            <button class="responseButton btn0" id="b1" onclick="followUser('#{target.userID}', 'followersCountOfUser'); toggleB()">follow</button>
+      </div>
+    </main>
+    <section class="card-list" id="cardListSection">
+    </section>
+
+  script(src="./static/script.js")
+  script.
+      let following = false
+      var button = document.getElementById('b1');
+      if('#{user.followingList}'.includes('#{target.userID}')){
+        document.getElementById('b1').innerHTML = 'following';
+        following = true;
+      }
+      function toggleB() {
+        following = !following
+        if(following) button.innerHTML = 'following';
+        else button .innerHTML  = 'follow'
+      }
+    let exhausted = false;
+    let counter = 0;
+    let loadedPosts = [];
+    let isLoading = false;
+    let targetUser = '#{target.userID}'
+
+    const cardListSection = document.getElementById('cardListSection');
+    document.addEventListener('DOMContentLoaded', function() {
+      loadPosts();
+    });
+    cardListSection.addEventListener('scroll', ()=>{
+        if(!exhausted && !isLoading){
+          var scrollDistanceFromRight = cardListSection.scrollWidth - cardListSection.clientWidth - cardListSection.scrollLeft;
+          if(scrollDistanceFromRight < 0.5*cardListSection.clientWidth){ //50%of visibile width of the container
+            loadPosts();
+          }
+        }
+      })
+
+
+    function addPostCard(HTMLdata){
+        cardListSection.innerHTML += HTMLdata;
+    }
+
+    const loadPosts = async () => {
+        isLoading = true;
+        try{
+            const requestBody = JSON.stringify({targetUser, counter, loadedPosts});
+            const response = await fetch('/loadUserPosts', {
+                method: 'POST',
+                credentials: "include",
+                headers: {'Content-Type': 'application/json'},
+                body : requestBody
+            });
+            counter += 10;
+            if(!response.ok){
+                throw new Error(`HTTP error! Status:  ${response.status}` );
+            }
+            const data = await response.json();
+            if(data.posts.length == 0) exhuasted = true
+            data.posts.forEach(post =>{
+                addPostCard(createPostCard(post));
+            })
+        }
+        catch(error){
+            console.error('error Fetching', error)
+        }
+        isLoading = false;
+    }
+    
+</body>
+</html>

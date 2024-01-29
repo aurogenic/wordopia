@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing</title>
+    <link rel="stylesheet" href="./static/write.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/writemobile.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+    <div id="midSection">
+        <span>#{msg}</span>
+        <div class="container">
+            <form action="/write" method="post" enctype="multipart/form-data" >
+            <div class="title-container">
+              <label for="title">Enter Title:</label>
+              <textarea placeholder="Title" id="title" name="title" rows="1" cols="69" style="font-size: x-large; font-weight: bold;" onchange="filter(this)" required></textarea>
+            </div>
+            <div class="file-input-container">
+                <label class="custom-file-input" for="reqpost">
+                    <span class="fileInputIcon">📂</span> Choose File
+                </label>
+                <input type="file" id="reqpost" name="reqpost" class="custom-file-label" onchange="displayFileName(this)" multiple="true">
+                <span class="file-name">No file chosen</span>
+            </div>
+            <div class="content-container">
+              <label for="content">Enter Content:</label>
+              <textarea id="content" placeholder="Content goes here" name="content" rows="30" cols="106" required></textarea>
+            </div>
+
+            <div class="formGroup">
+                <button type="submit" id="submitButton" class="userButton">submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    script(src="./static/script.js")
+    script.  
+      function displayFileName(input) {
+        const fileInputWrapper = input.parentElement;
+        const fileNameSpan = fileInputWrapper.querySelector('.file-name');
+
+        if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name;
+        } else {
+            fileNameSpan.textContent = 'No file chosen';
+        }
+      }
+</body>
+</html>

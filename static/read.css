@@ -1,0 +1,58 @@
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #17141d;
+}
+
+#midSection {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease; /* Smooth background transition */
+  border-radius: 16px;
+  background: #17141d;
+  box-shadow: -1rem 0 3rem #000;
+}
+
+.lightedText{
+  transition: background .5s ease;
+}
+
+#midSection:hover .lightedText {
+  background: linear-gradient(90deg, rgba(250,61,61,1) 0%, rgba(254,205,15,0.9680204845610119) 100%);
+  text-shadow: none;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.Rpost h1 {
+  color: #fff;
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.Rpost h2 {
+  color: #d3d3d3;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.Rpost p {
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.responseL{
+  color: #ccc;
+}
+
+.postImg{
+  height: 100%;
+  width: fit-content;
+  filter: none;
+}

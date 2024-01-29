@@ -1,0 +1,28 @@
+.container{
+    padding: 5px
+}
+#content{
+    width: 100%;
+}
+
+.content-container{
+    max-width: 100%;
+}
+
+
+.title-container{
+    padding: 5px;
+    margin: 0;
+    width: 100%;
+}
+
+#submitButton{
+    margin: 0;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: gray;
+}
+
+.formGroup{
+    margin-top: -30px;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#{post.title}</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+  <link rel="stylesheet" href="./static/read.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+  <div id="midSection">
+    <div class="Rpost">
+      <h1 class="lightedText" onclick="lighten('content')">#{post.title}</h1>
+      <form action="/users" method="post" style="align-self: end; padding: 5px; margin-left: auto; padding-right: 10px;">
+        <input type="hidden" name="targetUser" value=#{post.author}>
+        <button type="submit" class="invB lightedText">-#{post.author}</button>
+      </form>
+      <img src="./static/posts/#{post.postId}.jpeg" onerror="this.style.visibility = 'hidden'" alt="" class="postImg">
+      <img src="./static/posts/#{post.postId}.gif" onerror="this.style.visibility = 'hidden'" alt="" class="postImg">
+      <pre style="white-space: pre-wrap; overflow-x: auto; color: white" id="content">#{post.content}</pre>
+      </div>
+      <ul class="resposeBar">
+        <li>
+          <button class="responseButton" onclick="likePost('#{post.postId}', 'likes')" ><img src='./static/assets/like.png'</button>
+          <h1 class="responseL" id="likes">#{post.likes}</h1>
+        </li>
+        <li>
+          <button class="responseButton" onclick="savePost('#{post.postId}', 'savB')"><img src='./static/assets/save.png'>
+          <h1 class="responseL" id="savB">save</h1>
+        </li>
+        <li class="onlyWideScreen">
+          <button class="responseButton" onclick="wide()"><img  id="wideB" src='./static/assets/wide.png'>
+          <h1 class="responseL" id="wideL">wide</h1>
+        </li> 
+      </ul>
+      
+    </div>
+  script(src="./static/script.js")
+  script.
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'L') {
+        {lighten('content')}
+      } else if(event.key === 'w'){
+        wide()
+      }
+    });
+  script. 
+    var midSection = document.getElementById('midSection');
+    var wideB = document.getElementById('wideB');
+    var wideL = document.getElementById('wideL');
+    var responseBar = document.getElementsByClassName('resposeBar')[0];
+    const wide = () =>{
+      if(midSection.style.maxWidth != '800px'){
+        midSection.style.maxWidth = '800px';
+        wideB.src = "./static/assets/wide.png"
+        wideL.innerHTML = 'wide'
+      }
+      else{
+        midSection.style.maxWidth = '100%';
+        wideB.src = "./static/assets/shrink.svg";
+        wideL.innerHTML = 'shrink'
+      }
+      
+    }
+</body>
+</html>

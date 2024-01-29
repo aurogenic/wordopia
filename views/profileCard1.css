@@ -1,0 +1,51 @@
+body {
+    background-color: #17141d;
+    color: white;
+}
+
+.profileCardsList {
+    padding-top: 50px;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.profileCard1 {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    height: 25rem;
+    width: 20rem;
+    min-width: 20rem;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    background: #17141d;
+    box-shadow: -1rem 0 3rem #000;
+    transition: .2s;
+    overflow: hidden;
+    align-items: center;
+    gap: 1rem;
+}
+
+.id {
+    width: 100%;
+    text-align: right;
+    opacity: 0.5;
+    font-size: .8rem;
+}
+
+.profilePhoto {
+    font-size: xx-large;
+    width: 10rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    position: relative;
+    border: 5px rgba(50, 50, 50, 0.5) solid;
+    border-radius: 50%
+}
+
+.profilePhoto img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+}

@@ -1,0 +1,91 @@
+/* Header and Navigation styles */
+
+li {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+nav a {
+  font-size: small;
+  padding: 7px;
+}
+
+
+nav a[href="/"] {
+  background-color: #222831;
+  border-radius: 15px;
+  background: linear-gradient(90deg, rgba(250,61,61,1) 0%, rgba(254,205,15,0.9680204845610119) 100%);
+  text-shadow: none;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.postI{
+  padding: 15px;
+  transform: translateX(50px);/*intersection observer*/
+  
+}
+.title{
+    padding-right: 0px;
+    font-size: x-large;
+}
+
+.postI .lightedText{
+  background: linear-gradient(90deg, rgba(250,61,61,1) 0%, rgba(254,205,15,0.9680204845610119) 100%);
+  text-shadow: none;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.resposeBar {
+margin: 10px 0 0;
+}
+
+.responseBar li {
+padding: 0;/**/
+}
+
+.responseBar li:hover{
+  filter: none;
+}
+
+.responseButton {
+  width: 75px;
+  padding: 2px;
+}
+
+.responseButton:hover{
+  border: none;
+  background-color: transparent;
+  }
+
+.responseL {
+margin: 0 5px;
+font-size: 10px;/**/
+}
+
+.responseButton img {
+margin-right: 2px;
+}
+
+.userButton:hover{
+border: none;
+}
+
+.author{
+    font-size: x-small;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+}
+.buttonForm{
+    margin-left: 0px;
+    padding-right: 0px;
+}
+
+.onlyWideScreen{
+  display: none;
+}
+

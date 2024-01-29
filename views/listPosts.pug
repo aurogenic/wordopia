@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#{str}</title>
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+    <link rel="stylesheet" href="./static/list.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/listmobile.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+    <div id="midSection">
+        <h1 style="width: 100%; text-align: center;color: whitesmoke;">#{str}</h1>
+        <div class="list">
+        </div>
+        <div class="results">
+            each post in posts
+                    <form action="/read" method="post" class="invForm">
+                        <input type="hidden" name="targetPost" value='#{post.postId}'>
+                        <button type="submit" class="userButton">#{post.title}<p style="display: inline; font-size:medium;">         -#{post.author}</p></button>
+                    </form>
+            </div>
+        
+    </div>
+    script(src="./static/script.js")
+    
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordopia</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+
+
+  <div id="midSection">
+    <div id="postContainer" class= "feed">
+      
+    </div>
+  </div>
+  script(src="https://code.jquery.com/jquery-3.6.4.min.js")
+  script(src="./static/script.js")
+
+
+  script.
+    let totalFeeds;
+    let toDeleteFromFeed =[], feedNumber = 10, loadedPosts =[];
+    var isLoading = false;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry =>{
+          entry.target.classList.toggle("show", entry.isIntersecting)
+      })
+    })
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initialPosts();
+    });
+
+    var oldScrollY = window.scrollY; 
+    var oldScrollY = window.scrollY;
+    var directionText = document.getElementById('direction');
+    window.onscroll = function(e) {
+      if(oldScrollY < window.scrollY){
+        if (isNearBottom()  && timePassed() &&!isLoading) {
+          isLoading = true;
+          loadMore();
+          lastScrollTime = new Date().getTime();
+        }
+      }
+      oldScrollY = window.scrollY;
+    }
+
+    const initialPosts = async () => {
+      try {
+        const response = await fetch('/loadinital', {
+          method: 'GET',
+          credentials: 'include', 
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+          totalFeeds = data.user.feed;
+          data.posts.forEach(item =>{
+            addPost(createPost(item))
+            loadedPosts.push(item.postId)
+            toDeleteFromFeed.push(item.postId)
+          })
+        var cards = document.querySelectorAll('.postI')
+        cards.forEach(card=>{
+            observer.observe(card)
+        })  
+        feedNumber++;
+      } catch (error) {
+        console.error('Fetch error:', error);
+        }
+    };
+
+    const loadMore = async ()=>{
+      try{
+        const requestBody = JSON.stringify({totalFeeds, loadedPosts, feedNumber, toDeleteFromFeed})
+        const response = await fetch('/loadmore', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {'Content-Type': 'application/json'},
+          body: requestBody
+        });
+        
+        feedNumber = feedNumber+1;
+        if(!response.ok){
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        toDeleteFromFeed = []
+        data.posts.forEach(item => {
+          addPost(createPost(item));
+          loadedPosts.push(item.postId);
+          toDeleteFromFeed.push(item.postId)
+        })
+      }
+      catch(error){
+        console.error('error fetching', error)
+      }
+      isLoading = false;
+    }
+
+    function createPost(item) {
+        return `
+          <div class="postI">  
+              <ul>
+                  <h1 class="lightedText title">${item.title}</h1>
+                  <form action="/users" method="post" class="buttonForm">
+                      <input type="hidden" name="targetUser" value="${item.author}">
+                      <button type="submit" class="userButton lightedText author">-${item.author}....</button>
+                  </form>
+              </ul>
+              <img src="./static/posts/${item.postId}.jpeg" onerror="this.style.display = 'none'" class="postImg">
+              <img src="./static/posts/${item.postId}.gif"  onerror="this.style.display = 'none'" class="postImg">
+              ${item.content.length < characterLimit ?
+                  `<pre class="contents">${item.content}</pre>` :
+                  `<pre class="contents">${item.content.substring(0, characterLimit)}</pre>
+                  <p style="width: 100%; text-align: center;" class="contents">
+                      <form action="/read" method="post" class="invForm" style="width: 100%; text-align: center;">
+                          <input type="hidden" name="targetPost" value='${item.postId}'>
+                          <button type="submit" class="responseButton author">read more...</button>
+                      </form>`
+              }
+              <ul class="responseBar">
+                  <li>
+                      <button class="responseButton" onclick="likePost('${item.postId}', '${item.postId}_like')">
+                          <img src='./static/assets/like.png'>
+                          <h1 class="responseL" id="${item.postId}_like">${item.likes}</h1>
+                      </button>
+                  </li>
+                  <li>
+                      <form action="/read" method="post" class="invForm" style="padding:0">
+                          <input type="hidden" name="targetPost" value='${item.postId}'>
+                          <button type="submit" class="responseButton">
+                              <img src='./static/assets/read.png'>
+                              <h1 class="responseL">Read</h1>
+                          </button>
+                      </form>
+                  </li>
+                  <li>
+                      <button class="responseButton" onclick="followUser('${item.author}', '${item.postId}_follow')">
+                          <img src='./static/assets/follow.png'>
+                          <h1 class="responseL" id="${item.postId}_follow">${item.followersCount}</h1>
+                      </button>
+                  </li>
+                  <li>
+                      <button class="responseButton" onclick="savePost('${item.postId}', '${item.postId}_save')">
+                          <img src='./static/assets/save.png'>
+                          <h1 class="responseL" id="${item.postId}_save">save</h1>
+                      </button>
+                  </li>
+              </ul>
+          </div>`;
+    }
+
+    var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    var characterLimit = screenWidth < 768 ? 1000 : 3000;
+
+    function addPost(postHTML){
+      document.getElementById('postContainer').innerHTML += postHTML;
+      let cards = document.querySelectorAll('.postI')
+      cards.forEach(card=>{
+          observer.observe(card)
+      }) 
+    }
+
+    function isNearBottom() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+
+      //pixelse from bottom
+      const threshold = 100;
+
+      return scrollTop > scrollHeight - clientHeight - threshold;
+    }
+    
+    let lastScrollTime = 0;
+    function timePassed() {
+      const currentScrollTime = new Date().getTime();
+      const deltaTime = currentScrollTime - lastScrollTime;
+
+      if (deltaTime > 000) { // 3sec
+        lastScrollTime = currentScrollTime;
+        return true;
+      }
+
+      return false;
+    }
+
+
+</body>
+</html>

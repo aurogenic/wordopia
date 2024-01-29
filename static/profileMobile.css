@@ -1,0 +1,82 @@
+.profile-container {
+  max-width: 100%;
+  margin: 0px 10px;
+  padding: 0;
+  border-radius: 16px;
+  box-shadow: -1rem 0 3rem #000;
+  color: white;
+}
+
+.inlist{
+  flex-direction: column;
+}
+/* .inlist li{
+  padding-right: 15px;
+  padding-bottom: 15px;
+} */
+
+.name {
+  padding: 5px;
+  padding-right: 15px;
+}
+  
+.invButton{
+  padding-left: 0;
+}
+    
+.numWithLabel{
+  flex-direction: row;
+  width: max-content;
+}
+.count{
+  padding-right: 10px;
+}
+
+.profilePosts{
+  width: 100%;
+  padding: 10px;
+  margin-left: 0;
+  align-self: center;
+}
+
+.responseButton{
+  border: 1px solid white;
+  border-radius: 5px;
+  font-size: medium;
+}
+    
+.responseButton:hover{
+  filter: none;
+}
+       
+#dpC {
+  display: flex;
+}
+
+    
+.BTN {
+  font-size: xx-small;
+}
+    
+.BTN:hover {
+  background-color: #45a049;
+}
+
+    
+.fixed-element {
+  background-color: #45a049;
+  top: 5%;
+  right: 100%;
+  width: fit-content;
+}
+    
+.btn0{
+  padding-right: 10px;
+  padding-bottom: 5px;
+  border: none;
+}
+
+.btn0:hover{
+  color: white;
+}
+

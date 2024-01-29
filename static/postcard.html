@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/cards.css">
+</head>
+
+<body>
+    <section class="card-list" id="cardListSection">
+        <!-- Content will be dynamically added here using JavaScript -->
+    </section>
+
+    <script>
+        let counter = 0;
+        let loadedPosts = [];
+        let isLoading = false;
+
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var targetUser= urlParams.get('pugVariable');
+
+
+        // Select the card list section
+        const cardListSection = document.getElementById('cardListSection');
+
+        function createPostCard(post) {
+            return `
+            <form class="invForm card" action="/read" method="post">
+                <input type="hidden" name="targetPost" value='${post.postId}'>
+                <button type="submit" class="invB">
+                    <article class="BTN">
+                        <div class="card-header">
+                            <p>${post.created}</p>
+                            <div class="card-author">
+                                <a href="#" class="author-avatar">
+                                    <img src="../static/profilephoto/${post.author}.jpeg">
+                                </a>
+                                <div class="author-name">
+                                    <div class="author-name-prefix">Author</div>
+                                    <span>${post.author}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>${post.title}</h2>
+                        <div class="extra">
+                            <img src="./static/posts/${post.postId}.gif"  onerror="this.style.display = 'none'">
+                            <img src="./static/posts/${post.postId}.jpeg" onerror="this.style.display = 'none'">
+                            <p class="post-content">${post.content}</p>
+                        </div>
+                    </article>
+                </button>
+            </form>
+            `
+        }
+        function addPostCard(HTMLdata){
+            cardListSection.innerHTML += HTMLdata;
+        }
+
+        const loadPosts = async () => {
+            isLoading = true;
+            try{
+                const requestBody = JSON.stringify({targetUser, counter, loadedPosts});
+                const response = await fetch('/loadUserPosts', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {'Content-Type': 'application/json'},
+                    body : requestBody
+                });
+                counter += 10;
+                if(!response.ok){
+                    throw new Error(`HTTP error! Status:  ${response.status}` );
+                }
+                const data = await response.json();
+                data.posts.forEach(post =>{
+                    addPostCard(createPostCard(post));
+                })
+            }
+            catch(error){
+                console.error('error Fetching', error)
+            }
+            isLoading = false;
+        }
+        loadPosts();
+    </script>
+</body>
+
+</html>

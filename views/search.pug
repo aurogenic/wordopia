@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+    <link rel="stylesheet" href="./static/list.css">
+    <link rel="stylesheet" href="./static/PostCard1.css">
+    <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/listmobile.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/search">search</a></li>
+        <li><a href="/write">write</a></li>
+        <li><a href="/profile">profile</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+    <div id="midSection">
+        <div class="searchBar">
+            <div class="searchF">
+                <button onclick="toggleList()" class="changer"> list</button>
+                <input id="query" placeholder="search..." class="searchI" value="#{str}">
+                <button onclick="search()" class="searchB responseButton">Search</button>
+            </div>
+        </div>
+        <div class="list">
+        </div>
+        <section class="card-list" id="cardListSection">  
+        </section>
+        <section class="results" id="postList" style="display: none">
+        </section>
+    </div>
+        
+    </div>
+    script(src="./static/script.js")
+    script. 
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      var searcher = document.getElementById('query')
+      var postList = document.getElementById('postList')
+      let exhausted = false;
+      var searching = false;
+      const cardListSection = document.getElementById('cardListSection');
+
+      var onscreenPosts = [];
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            search();
+        } 
+        if(event.key === ' '){
+          searchMore();
+        }
+      });
+
+      cardListSection.addEventListener('scroll', ()=>{
+        if(!exhausted && !searching){
+          var scrollDistanceFromRight = cardListSection.scrollWidth - cardListSection.clientWidth - cardListSection.scrollLeft;
+          if(scrollDistanceFromRight < 0.5*cardListSection.clientWidth){ //50%of visibile width of the container
+            searchMore();
+          }
+        }
+      })
+
+      
+
+      async function search(){
+        searching = true;
+        const str = searcher.value;
+          onscreenPosts = [];
+          cardListSection.innerHTML ="";
+          postList.innerHTML = "";
+        try{
+          const reqBody = JSON.stringify({str, onscreenPosts});
+          const response = await fetch('/search', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: reqBody
+          });
+
+          if(!response.ok){
+            throw new Error(`HHTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          data.posts.forEach(post =>{
+            post.created = new Date(post.created)
+            post.created = post.created.toLocaleDateString('en-US', options);
+
+            addPostCard(createPostCard(post))
+            addToPostList(createPostListElement(post))
+
+            onscreenPosts.push(post.postId)
+          })
+          
+        }
+        catch (err){
+          console.log("error :", err)
+        }
+        searching = false;
+      }
+      async function searchMore(){
+        searching = true;
+        const str = searcher.value;
+        try{
+          const reqBody = JSON.stringify({str, onscreenPosts});
+          const response = await fetch('/search', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: reqBody
+          });
+
+          if(!response.ok){
+            throw new Error(`HHTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data.posts)
+          if(data.posts.length == 0) exhausted = true;
+          data.posts.forEach(post =>{
+            post.created = new Date(post.created)
+            post.created = post.created.toLocaleDateString('en-US', options);
+            addPostCard(createPostCard(post))
+            addToPostList(createPostListElement(post))
+            onscreenPosts.push(post.postId)
+          })
+        }
+        catch (err){
+          console.log("error :", err)
+        }
+        searching = false;
+      }
+
+      function createPostListElement(post){
+        return `
+          <form action="/read" method="post" class="invForm">
+              <input type="hidden" name="targetPost" value='${post.postId}'>
+              <button type="submit" class="userButton">${post.title}<p style="display: inline; font-size:medium;">         -${post.author}</p></button>
+          </form>
+        `
+      }
+
+      function addToPostList(HTMLdata){
+        postList.innerHTML += HTMLdata;
+      }
+
+      function addPostCard(HTMLdata){
+          cardListSection.innerHTML += HTMLdata;
+      }
+      function toggleList(){
+        if(cardListSection.style.display === 'none'){
+            postList.style.display = 'none';
+            cardListSection.style.display = 'flex';
+        } else{
+            postList.style.display = 'unset';
+            cardListSection.style.display = 'none';
+        }
+      }
+        
+</body>
+</html>

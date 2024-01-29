@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign up</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+  <link rel="stylesheet" href="./static/login.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/loginmobile.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/login">login</a></li>
+        <li><a href="/signup">signup</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+  <div id="midSection">
+    <div class="container" style="max-width: 500px;">
+      <h1>Sign up</h1>
+      <form action="/signup" method="POST" onsubmit="return validate()">
+
+        <div class="form-group">
+          <label for="emailID">Email</label>
+          <input type="email" id="emailID" name="emailID"  maxlength="50" onchange="checkemail()"  required>
+          <p id="emailidTakenMessage" style="color:red; display:none;">email ID taken</p>
+        </div>
+
+        <div class="form-group">
+          <label for="userID">UserID</label>
+          <input type="text" id="userID" name="userID" maxlength="50" onchange="checkidval();checkid()" required>
+          <p id="idTakenMessage" style="color:red; display:none;">User Id Taken</p>
+          <p id="tooShortID" style="color:red; display:none;">userID too short(atleast 6 characters required)</p>
+          <p id="invalidID" style="color:red; display:none;">Invalid userID! Only alphabets, numbers, or underscores are allowed.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" maxlength="50" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" maxlength="50" onchange='checkPasswords();' required>
+          <p id="tooShortPassword" style="color:red; display:none;">password too short(atleast 6 characters required)</p>
+        </div>
+
+        <div class="form-group">
+          <label for="cpassword">Re-Type Password</label>
+          <input type="password" id="cpassword" name="cpassword" maxlength="50" onchange='checkPasswords();' required>
+          <p id="passwordMismatch" style="color:red; display:none;">Passwords do not match</p>
+        </div>
+        <button type="submit" id="submitButton" class="responseButton">Signup</button>
+        <p style="color:white; text-align: center;">#{msg}</p>
+      </form>
+    </div>
+  </div>
+  script(src="./static/script.js")
+
+  script.
+      function checkPasswords() {
+        var password1 = document.getElementById('password').value;
+        var password2 = document.getElementById('cpassword').value;
+        var mismatchMessage = document.getElementById('passwordMismatch');
+        var tooShortPassword = document.getElementById('tooShortPassword');
+        if(password1.length > 6){
+          tooShortPassword.style.display = 'none';
+          if (password1 !== password2) {
+            mismatchMessage.style.display = 'block';
+            return false;
+          } else {
+            mismatchMessage.style.display = 'none';
+            return true;
+          }
+        } 
+        tooShortPassword.style.display = 'block';
+        return false
+
+      }
+      const checkid = async ()=>{
+        const userID = document.getElementById('userID').value
+        var idTakenMessage = document.getElementById('idTakenMessage');
+        try{
+          const reqBody = JSON.stringify({userID})
+          const response = await fetch('/checkid', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: reqBody
+          });
+          if(!response.ok){
+            throw new Error(`HHTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          if(data.existsBoolean) {
+            idTakenMessage.style.display = 'block';
+            return false
+          }
+          idTakenMessage.style.display = 'none';
+          return true;
+        }
+        catch (err){
+          console.log("error :", err)
+          return false;
+        }
+      }
+      const checkemail = async ()=>{
+        const emailID = document.getElementById('emailID').value;
+        var emailidTakenMessage = document.getElementById('emailidTakenMessage');
+        try{
+          const reqBody = JSON.stringify({emailID})
+          const response = await fetch('/checkemail', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: reqBody
+          });
+          if(!response.ok){
+            throw new Error(`HHTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          if(data.existsBoolean) {
+            emailidTakenMessage.style.display = 'block';
+            return false
+          }
+          emailidTakenMessage.style.display = 'none';
+          return true;
+        }
+        catch (err){
+          console.log("error :", err)
+          return false;
+        }
+      }
+      const validate = async ()=>{
+        return (checkidval() && checkPasswords() && checkid() && checkemail())
+      }
+      const checkidval = ()=>{
+        var tooShortID = document.getElementById('tooShortID');
+        var invalidID = document.getElementById('invalidID');
+        var userid = document.getElementById('userID').value;
+        var regex = /^[a-zA-Z0-9_]+$/;
+        if (!regex.test(userid)) {
+          invalidID.style.display = 'block'
+          tooShortID.style.display = 'none'
+          return false;
+        }  else{
+          invalidID.style.display = 'none';
+          if(userid.length < 7){
+            tooShortID.style.display = 'block'
+            return false;
+          }
+          tooShortID.style.display = 'none'
+        }
+        return true;
+      }
+      
+</body>
+</html>

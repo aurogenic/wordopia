@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="./static/style.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/stylemobile.css">
+  <link rel="stylesheet" href="./static/login.css">
+  <link rel="stylesheet" media="screen and (max-width: 720px)" href="./static/loginmobile.css">
+</head>
+<body>
+  <header id="headerForNav">
+    <nav>
+      <ul>
+        <li><a href="/">Wordopia</a></li>
+        <li id="search"><a href="/login">login</a></li>
+        <li><a href="/signup">signup</a></li>
+      </ul>
+    </nav>
+  </header>
+  <br>
+  <div id="midSection">
+    <div class="container">
+      <h1>Login</h1>
+      <form onsubmit="submitHandler(); return false;">
+        <div class="form-group">
+          <label for="emailID">Email Id</label>
+          <input type="email" id="emailID" name="emailID"equired>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"required>
+        </div>
+        <button type="submit" class="responseButton">Login</button>
+      </form>
+      <p style="color:red; text-align: center;">#{msg}</p>
+    </div>
+  </div>
+  script(src="./static/script.js")
+   if msg != undefined
+    alert(#{msg})
+  script.
+      function submitHandler() {
+        fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            emailID: document.getElementById("emailID").value,
+            password: document.getElementById("password").value
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.accessToken)
+          if (data.accessToken !== undefined) {
+            document.cookie = `access_token=${data.accessToken}; path=/;SameSite=None; Secure`;
+            console.log(data.accessToken)
+            window.location.href = "/profile";
+          } else {
+            document.querySelector(".form-group label[for='emailID']").style.color = "red";
+            document.querySelector(".form-group label[for='password']").style.color = "red";
+            document.querySelector(".form-group label[for='emailID']").innerHTML = "Invalid email or password";
+          }
+        })
+        .catch(error => console.error("Error:", error));
+
+        return false;
+      }   
+</body>
+</html>

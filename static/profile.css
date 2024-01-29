@@ -1,0 +1,180 @@
+
+body {
+font-family: 'Arial', sans-serif;
+}
+
+
+.profile-container {
+max-width: 800px;
+margin: 20px auto;
+padding: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+border-radius: 20px;border-radius: 16px;
+background: #17141d;
+box-shadow: -1rem 0 3rem #000;
+color: white;
+}
+
+.name {
+text-align: right;
+background: linear-gradient(270deg, rgba(250,61,61,1) 0%, rgba(254,205,15,0.9680204845610119) 35%);
+text-shadow: none;
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+
+.profile-details {
+display: flex;
+align-items: end;
+}
+
+.dp {
+  width: 30%;
+  aspect-ratio: 1;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  align-self: flex-start ;
+  margin-top: 1%;
+  margin-right: 20px;
+  }
+
+.inlist {
+display: flex;
+flex-direction: row;
+}
+
+.inlist li {
+font-size: 16px;
+}
+
+.invButton{
+  border: none;
+  background-color: transparent;
+  font-size: larger;
+  padding-left: 10%;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+  color: white;
+}
+
+.numWithLabel{
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+.count{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+
+.postList{
+display: flex;
+flex-direction: column;
+}
+
+.profilePosts{
+  width: max-content;
+  padding: 10px;
+  margin-left: 23%;
+}
+
+.userButton{
+background: transparent;
+border: black;
+border-radius: 10px;
+}
+
+img:hover{
+  filter: none;
+}
+.responseButton{
+  width: 30%;
+  border: 1px white solid;
+  color: white;
+  font-size: x-large;
+}
+
+.responseButton:hover{
+  filter: invert(100%);
+}
+
+
+#dpC {
+text-align: center;
+align-items: cent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+er;
+margin-top: 20px;
+display: none;
+}
+
+
+.BTN {
+padding: 8px 12px;
+margin-right: 10px;
+cursor: pointer;
+background-color: #4caf50;
+color: #fff;
+border: none;
+border-radius: 4px;
+}
+
+.BTN:hover {
+background-color: #45a049;
+}
+
+
+.extra{
+    margin-top: 10px;
+}
+
+.fixed-element {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    width: 50%;
+    padding: 20px;
+    visibility: hidden;
+  }
+
+  .btn0{
+    width: fit-content;
+  }
+
+
+  .cardsFrame{
+    width: 100%;
+    height: fit-content;
+  }
