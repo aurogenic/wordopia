@@ -8,7 +8,7 @@ const pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    port: 3306
+    port: process.env.MYSQL_PORT
 }).promise()
 export async function createUser(id, name, emailID, password, date) {
   try {
