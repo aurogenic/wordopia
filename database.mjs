@@ -16,7 +16,7 @@ console.log("database = ", process.env.MYSQL_DATABASE)
 const uri = process.env.MYSQL_URI;
 
 // Create a connection
-const pool = await mysql.createPool(uri);
+const pool = mysql.createPool(uri);
 
 // Now you can use the connection to interact with the database
 
