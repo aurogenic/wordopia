@@ -3,13 +3,23 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 console.log("database = ", process.env.MYSQL_DATABASE)
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    port: process.env.MYSQL_PORT
-}).promise()
+//const pool = mysql.createPool({
+//    host: process.env.MYSQL_HOST,
+//    user: process.env.MYSQL_USER,
+//    password: process.env.MYSQL_PASSWORD,
+//    database: process.env.MYSQL_DATABASE,
+//    port: process.env.MYSQL_PORT
+//}).promise()
+
+
+// Connection URI 
+const uri = process.env.MYSQL_URI;
+
+// Create a connection
+const pool = await mysql.createPool(uri);
+
+// Now you can use the connection to interact with the database
+
 export async function createUser(id, name, emailID, password, date) {
   try {
       await pool.query(
