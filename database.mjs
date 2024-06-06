@@ -2,6 +2,7 @@ import mysql from 'mysql2'
 import dotenv from 'dotenv'
 dotenv.config()
 
+console.log("database = ", process.env.MYSQL_DATABASE)
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
@@ -9,7 +10,6 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE,
     port: 3306
 }).promise()
-console.log("database = ", process.env.MYSQL_DATABASE)
 export async function createUser(id, name, emailID, password, date) {
   try {
       await pool.query(
